@@ -41,6 +41,9 @@ class ArgsConfig:
     dataset_path: List[str]
     """Path to the dataset directory or directories"""
 
+    run_name: str = ""
+    """run_name to use when logging with wandb (defaults to last segment of output_dir)"""
+
     output_dir: str = "/tmp/gr00t"
     """Directory to save model checkpoints."""
 
@@ -241,7 +244,7 @@ def main(config: ArgsConfig):
     # 2.1 modify training args
     training_args = TrainingArguments(
         output_dir=config.output_dir,
-        run_name=None,
+        run_name=config.run_name if len(config.run_name) != 0 else config.output_dir.split("/")[-1],
         remove_unused_columns=False,
         deepspeed="",
         gradient_checkpointing=False,
@@ -302,9 +305,9 @@ if __name__ == "__main__":
     available_gpus = torch.cuda.device_count() if torch.cuda.is_available() else 1
 
     # Validate GPU configuration
-    assert (
-        config.num_gpus <= available_gpus
-    ), f"Number of GPUs requested ({config.num_gpus}) is greater than the available GPUs ({available_gpus})"
+    assert config.num_gpus <= available_gpus, (
+        f"Number of GPUs requested ({config.num_gpus}) is greater than the available GPUs ({available_gpus})"
+    )
     assert config.num_gpus > 0, "Number of GPUs must be greater than 0"
     print(f"Using {config.num_gpus} GPUs")
 

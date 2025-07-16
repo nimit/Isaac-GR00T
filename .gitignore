@@ -1,3 +1,7 @@
+# finetuning datasets & models (uploaded separately to hf)
+datasets/
+n1.5_finetunes/
+
 # C extensions
 *.so
 

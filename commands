@@ -1,0 +1,7 @@
+python scripts/gr00t_finetune.py \
+--dataset_path datasets/touch_cubes_multicolor \
+--output_dir n1.5_finetunes/touch_objects \
+--max_steps 3000 \
+--lora_rank 0 \
+--video_backend torchvision_av \
+--data_config so100
